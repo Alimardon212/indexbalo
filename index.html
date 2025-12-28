@@ -3,26 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta name="description" content="Telegram Mini App">
 
-  <title>my_web_app</title>
+  <title>My Telegram Mini App</title>
   <link rel="manifest" href="manifest.json">
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      Telegram.WebApp.disableVerticalSwipes();
+      // Telegram WebApp vertikal siljishlarni o'chiradi
+      if (window.Telegram && Telegram.WebApp) {
+        Telegram.WebApp.disableVerticalSwipes();
+      }
     });
   </script>
 
   <style>
-    /* Loader style */
+    /* Loader */
     #loader {
       position: fixed;
       z-index: 9999;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      top: 0; left: 0; right: 0; bottom: 0;
       background: white;
       display: flex;
       align-items: center;
@@ -30,81 +30,69 @@
     }
 
     .spinner {
-      width: 50px;
-      height: 50px;
+      width: 50px; height: 50px;
       border: 5px solid #ccc;
       border-top-color: #000;
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     /* Scroll to top button */
     #scrollTopBtn {
       display: none;
       position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 10000;
+      bottom: 20px; right: 20px;
       padding: 10px 15px;
       font-size: 16px;
-      cursor: pointer;
       border: none;
       background-color: #333;
       color: white;
       border-radius: 5px;
+      cursor: pointer;
+      z-index: 10000;
     }
   </style>
 
   <script>
     var serviceWorkerVersion = '1953420609';
-
-    // Scroll to top logic
     function scrollToTop() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-
-    // Show/hide scroll button
-    window.onscroll = function () {
+    window.onscroll = function() {
       var btn = document.getElementById("scrollTopBtn");
       if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
         btn.style.display = "block";
-      } else {
-        btn.style.display = "none";
-      }
+      } else { btn.style.display = "none"; }
     };
   </script>
 
+  <!-- Flutter loader -->
   <script src="flutter.js" defer></script>
 </head>
 <body>
 
   <!-- Loader -->
-  <div id="loader">
-    <div class="spinner"></div>
-  </div>
+  <div id="loader"><div class="spinner"></div></div>
 
-  <!-- Scroll to top button -->
+  <!-- Scroll button -->
   <button id="scrollTopBtn" onclick="scrollToTop()">Yuqoriga</button>
 
   <script>
-    window.addEventListener('load', function(ev) {
-      _flutter.loader.loadEntrypoint({
-        serviceWorker: {
-          serviceWorkerVersion: serviceWorkerVersion,
-        },
-        onEntrypointLoaded: function(engineInitializer) {
-          engineInitializer.initializeEngine().then(function(appRunner) {
-            appRunner.runApp().then(function() {
-              // Hide loader after Flutter app is ready
-              document.getElementById('loader').style.display = 'none';
+    window.addEventListener('load', function() {
+      if (window._flutter && _flutter.loader) {
+        _flutter.loader.loadEntrypoint({
+          serviceWorker: { serviceWorkerVersion: serviceWorkerVersion },
+          onEntrypointLoaded: function(engineInitializer) {
+            engineInitializer.initializeEngine().then(function(appRunner) {
+              appRunner.runApp().then(function() {
+                document.getElementById('loader').style.display = 'none';
+              });
             });
-          });
-        }
-      });
+          }
+        });
+      }
     });
   </script>
 
