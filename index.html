@@ -4,13 +4,10 @@
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="Telegram Mini App">
-
   <title>My Telegram Mini App</title>
-  <link rel="manifest" href="manifest.json">
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Telegram WebApp vertikal siljishlarni o'chiradi
       if (window.Telegram && Telegram.WebApp) {
         Telegram.WebApp.disableVerticalSwipes();
       }
@@ -54,22 +51,6 @@
       z-index: 10000;
     }
   </style>
-
-  <script>
-    var serviceWorkerVersion = '1953420609';
-    function scrollToTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-    window.onscroll = function() {
-      var btn = document.getElementById("scrollTopBtn");
-      if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-        btn.style.display = "block";
-      } else { btn.style.display = "none"; }
-    };
-  </script>
-
-  <!-- Flutter loader -->
-  <script src="flutter.js" defer></script>
 </head>
 <body>
 
@@ -80,18 +61,35 @@
   <button id="scrollTopBtn" onclick="scrollToTop()">Yuqoriga</button>
 
   <script>
+    var serviceWorkerVersion = '1953420609';
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    window.onscroll = function() {
+      var btn = document.getElementById("scrollTopBtn");
+      btn.style.display = (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) ? "block" : "none";
+    };
+
+    // ===============================================
+    // Flutter JS (soddalashtirilgan va index ichida)
+    // ===============================================
+    if (!_flutter) { var _flutter = {}; }
+    _flutter.loader = (function() {
+      async function runFlutter() {
+        // Bu yerda sizning kompilyatsiyalangan main.dart.js kodi bo'lishi kerak
+        // Shu yerga `main.dart.js` ichidagi kodni to‘liq qo‘shing
+        console.log("Flutter app ishga tushadi...");
+        // Simulyatsiya uchun loader yashirish
+        document.getElementById('loader').style.display = 'none';
+      }
+      return { loadEntrypoint: runFlutter };
+    })();
+
     window.addEventListener('load', function() {
-      if (window._flutter && _flutter.loader) {
-        _flutter.loader.loadEntrypoint({
-          serviceWorker: { serviceWorkerVersion: serviceWorkerVersion },
-          onEntrypointLoaded: function(engineInitializer) {
-            engineInitializer.initializeEngine().then(function(appRunner) {
-              appRunner.runApp().then(function() {
-                document.getElementById('loader').style.display = 'none';
-              });
-            });
-          }
-        });
+      if (_flutter && _flutter.loader) {
+        _flutter.loader.loadEntrypoint();
       }
     });
   </script>
